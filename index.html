@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Titelgeneratorn — Marknad, Kommunikation & Design</title>
+  <style>
+    :root {
+      --bg: #f4f4f0;
+      --surface: #ffffff;
+      --surface-hover: #eaeae4;
+      --text: #141413;
+      --text-muted: #5c5c58;
+      --border: #d8d8d0;
+      --accent: #d94e34;
+      --accent-soft: rgba(217, 78, 52, 0.08);
+      --accent-text: #ffffff;
+      --chip-active-bg: #141413;
+      --chip-active-text: #f4f4f0;
+      --badge-bg: #e6e6df;
+    }
+
+    [data-theme="dark"] {
+      --bg: #111110;
+      --surface: #1b1b19;
+      --surface-hover: #262623;
+      --text: #f2f2ee;
+      --text-muted: #9e9e96;
+      --border: #2e2e2a;
+      --accent: #ff5c3d;
+      --accent-soft: rgba(255, 92, 61, 0.1);
+      --accent-text: #111110;
+      --chip-active-bg: #f2f2ee;
+      --chip-active-text: #111110;
+      --badge-bg: #262623;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      padding: 2rem 1.25rem 5rem;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      max-width: 62ch;
+      font-size: 1rem;
+    }
+
+    .theme-toggle {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.5rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      background: var(--surface-hover);
+    }
+
+    /* Controls & Level Filter */
+    .controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      background: var(--surface);
+      padding: 1rem 1.25rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .level-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .level-btn {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .level-btn.active {
+      background: var(--chip-active-bg);
+      color: var(--chip-active-text);
+      border-color: var(--chip-active-bg);
+    }
+
+    .selection-status {
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .reset-btn {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* Skill Groups */
+    .skill-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .skill-group {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+    }
+
+    .skill-group h2 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .chip {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: transform 0.1s ease, background-color 0.15s ease, color 0.15s ease;
+      user-select: none;
+    }
+
+    .chip:hover {
+      border-color: var(--text-muted);
+    }
+
+    .chip:active {
+      transform: scale(0.96);
+    }
+
+    .chip.selected {
+      background: var(--chip-active-bg);
+      color: var(--chip-active-text);
+      border-color: var(--chip-active-bg);
+      font-weight: 500;
+    }
+
+    .chip.disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* Hybrid / Combination Generator Box */
+    .hybrid-studio {
+      background: var(--surface);
+      border: 1px solid var(--accent);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 2.75rem;
+      position: relative;
+      transition: all 0.25s ease;
+    }
+
+    .hybrid-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .hybrid-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+    }
+
+    .style-switcher {
+      display: flex;
+      gap: 0.35rem;
+      background: var(--bg);
+      padding: 0.25rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .style-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.3rem 0.65rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .style-btn.active {
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+
+    .hybrid-selectors {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 0.75rem;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    @media (max-width: 640px) {
+      .hybrid-selectors {
+        grid-template-columns: 1fr;
+      }
+      .hybrid-plus {
+        text-align: center;
+      }
+    }
+
+    .hybrid-select {
+      width: 100%;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.55rem 0.75rem;
+      font-size: 0.875rem;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .hybrid-plus {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 1.1rem;
+    }
+
+    .hybrid-preview-box {
+      background: var(--accent-soft);
+      border: 1px dashed var(--accent);
+      border-radius: 10px;
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .hybrid-output {
+      font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      word-break: break-word;
+    }
+
+    .hybrid-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* Pitch Generator Box */
+    .pitch-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .pitch-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .pitch-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .pitch-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    .pitch-controls {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--accent-text);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+    }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface-hover);
+    }
+
+    /* Results */
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1.25rem;
+    }
+
+    .results-header h2 {
+      font-size: 1.35rem;
+      letter-spacing: -0.02em;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .role-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transition: border-color 0.2s ease;
+    }
+
+    .role-card:hover {
+      border-color: var(--text-muted);
+    }
+
+    .role-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .role-meta {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      background: var(--badge-bg);
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .match-score {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .role-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .role-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .role-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 0.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .matched-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .matched-tag {
+      font-size: 0.75rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    .matched-tag.hit {
+      border-color: var(--accent);
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .copy-btn {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .copy-btn:hover {
+      background: var(--chip-active-bg);
+      color: var(--chip-active-text);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3.5rem 1.5rem;
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      color: var(--text-muted);
+    }
+
+    footer {
+      margin-top: 4rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Titelgeneratorn</h1>
+        <p class="subtitle">Välj upp till 5 färdigheter. Få matchande yrkestitlar, kombinera två roller till en hybridrubrik och generera en färdig pitch för CV och LinkedIn.</p>
+      </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Byt färgtema">Ljust läge</button>
+    </header>
+
+    <div class="controls-bar">
+      <div class="level-filters" role="group" aria-label="Filtrera på rollnivå">
+        <button class="level-btn active" data-level="all">Alla roller</button>
+        <button class="level-btn" data-level="Operativ">Operativ / Skapande</button>
+        <button class="level-btn" data-level="Strategisk">Strategisk / Ledande</button>
+      </div>
+      <div class="selection-status">
+        <span id="counterText">Valda färdigheter: 0 / 5</span>
+        <button class="reset-btn" id="resetBtn" style="display: none;">Rensa val</button>
+      </div>
+    </div>
+
+    <section class="skill-grid" id="skillGrid"></section>
+
+    <!-- Kombinationsgenerator & Pitch-studio -->
+    <section class="hybrid-studio" id="hybridStudio" aria-label="Kombinationsgenerator för hybridtitlar och pitch">
+      <div class="hybrid-header">
+        <span class="hybrid-label">✦ Hybridrubrik & Pitch-studio</span>
+        <div class="style-switcher" role="group" aria-label="Välj format för hybridtitel">
+          <button type="button" class="style-btn active" data-format="slash">Klassisk (/)</button>
+          <button type="button" class="style-btn" data-format="dot">LinkedIn (·)</button>
+          <button type="button" class="style-btn" data-format="tech">Kreativ (//)</button>
+        </div>
+      </div>
+
+      <div class="hybrid-selectors">
+        <select id="hybridSelectA" class="hybrid-select" aria-label="Välj första roll"></select>
+        <span class="hybrid-plus">+</span>
+        <select id="hybridSelectB" class="hybrid-select" aria-label="Välj andra roll"></select>
+      </div>
+
+      <div class="hybrid-preview-box">
+        <div class="hybrid-output" id="hybridOutput">Digital Designer / Content Creator</div>
+        <div class="hybrid-actions">
+          <button type="button" class="btn-secondary" id="shuffleHybridBtn" title="Slumpa ny kombination bland dina bästa träffar">↻ Slumpa mix</button>
+          <button type="button" class="btn-primary" id="copyHybridBtn">Kopiera rubrik</button>
+        </div>
+      </div>
+
+      <div class="pitch-box">
+        <div class="pitch-top">
+          <span class="pitch-tag" id="pitchToneLabel">LinkedIn / CV-pitch · Helhetsorienterad</span>
+        </div>
+        <p class="pitch-text" id="pitchOutput"></p>
+        <div class="pitch-controls">
+          <button type="button" class="btn-secondary" id="cyclePitchBtn">↻ Byt tonläge på pitch</button>
+          <button type="button" class="btn-secondary" id="copyPitchBtn">Kopiera pitch</button>
+        </div>
+      </div>
+    </section>
+
+    <section aria-live="polite">
+      <div class="results-header">
+        <h2 id="resultsHeading">Förslag på titlar</h2>
+      </div>
+      <div class="results-grid" id="resultsContainer"></div>
+    </section>
+
+    <footer>
+      <span>Rollbeskrivningar baserade på Knacks Titelguide.</span>
+      <span>Använd "+ Mixa" på ett kort för att ladda rollen i studion.</span>
+    </footer>
+  </div>
+
+  <script>
+    const SKILL_GROUPS = [
+      {
+        name: "Skapande & Produktion",
+        skills: [
+          { id: "text", label: "Text & Copy", short: "Copy", verb: "textproduktion och copywriting" },
+          { id: "grafisk-design", label: "Grafisk design & Layout", short: "Grafisk Design", verb: "visuell identitet och grafisk formgivning" },
+          { id: "foto-bild", label: "Foto & Bildredigering", short: "Foto", verb: "fotografi och bildbearbetning" },
+          { id: "video-film", label: "Video & Rörlig bild", short: "Video", verb: "rörlig bild och videoproduktion" },
+          { id: "animation", label: "2D / 3D & Motion", short: "Motion", verb: "motion graphics och animation" },
+          { id: "webb-kod", label: "Webbutveckling (HTML/CSS/JS)", short: "Webb", verb: "front-end-utveckling och kod" },
+          { id: "ai-verktyg", label: "AI-verktyg & Prompting", short: "AI", verb: "generativa AI-arbetsflöden" }
+        ]
+      },
+      {
+        name: "Kanaler & Plattformar",
+        skills: [
+          { id: "sociala-medier", label: "Sociala medier", short: "Sociala Medier", verb: "strategisk närvaro i sociala medier" },
+          { id: "webb-cms", label: "Webb & CMS", short: "CMS", verb: "webbpublicering och digitala plattformar" },
+          { id: "ehandel", label: "E-handel", short: "E-handel", verb: "e-handel och digital försäljning" },
+          { id: "pr-press", label: "PR, Press & Media", short: "PR", verb: "PR och medierelationer" },
+          { id: "event-scen", label: "Event & Brand Experience", short: "Event", verb: "eventproduktion och varumärkesupplevelser" },
+          { id: "print-forpackning", label: "Print & Förpackning", short: "Print", verb: "print och förpackningsdesign" }
+        ]
+      },
+      {
+        name: "Strategi, UX & Analys",
+        skills: [
+          { id: "varumarke", label: "Varumärkesstrategi", short: "Varumärke", verb: "varumärkesbyggande och positionering" },
+          { id: "seo-sem", label: "SEO & Sökoptimering", short: "SEO", verb: "sökmotoroptimering (SEO)" },
+          { id: "data-analys", label: "Data & Webbanalys", short: "Analys", verb: "datadriven analys och uppföljning" },
+          { id: "cro", label: "Konvertering (CRO)", short: "CRO", verb: "konverteringsoptimering" },
+          { id: "ux-ui", label: "UX / UI & Användarbeteende", short: "UX/UI", verb: "användarupplevelse och gränssnittsdesign" },
+          { id: "paid-media", label: "Paid Media & Annonsering", short: "Paid Media", verb: "digital annonsering och paid media" }
+        ]
+      },
+      {
+        name: "Ledning & Koordinering",
+        skills: [
+          { id: "projektledning", label: "Projekt- & Produktionsledning", short: "Projektledning", verb: "projekt- och produktionsledning" },
+          { id: "teamledning", label: "Creative / Art Direction", short: "Creative Direction", verb: "kreativ ledning och konceptutveckling" },
+          { id: "crm-kund", label: "Kundrelationer & CRM", short: "CRM", verb: "kundrelationer och CRM" },
+          { id: "affarsutveckling", label: "Affärs- & Produktutveckling", short: "Affärsutveckling", verb: "affärs- och produktutveckling" }
+        ]
+      }
+    ];
+
+    const ROLES = [
+      {
+        id: "content-manager",
+        title: "Content Manager / Innehållsansvarig",
+        shortTitle: "Content Manager",
+        category: "Digitalt & socialt innehåll",
+        level: "Strategisk",
+        skills: ["text", "foto-bild", "video-film", "sociala-medier", "webb-cms", "data-analys"],
+        description: "Ansvarar för innehåll i digitala och sociala kanaler som webbsida och sociala medier. Planerar, skapar, publicerar och analyserar resultaten."
+      },
+      {
+        id: "content-writer",
+        title: "Content Writer",
+        shortTitle: "Content Writer",
+        category: "Digitalt & socialt innehåll",
+        level: "Operativ",
+        skills: ["text", "webb-cms", "seo-sem"],
+        description: "Producerar text till digitala kanaler som webbsidor, bloggar och nyhetsbrev, ofta med fokus på SEO och innehållsstrategi."
+      },
+      {
+        id: "content-creator",
+        title: "Content Creator / Content Producer",
+        shortTitle: "Content Creator",
+        category: "Digitalt & socialt innehåll",
+        level: "Operativ",
+        skills: ["text", "grafisk-design", "foto-bild", "video-film", "sociala-medier", "webb-cms", "data-analys"],
+        description: "Arbetar brett med produktion av innehåll för olika kanaler och behärskar både webbproduktion, design, text, bild, video och optimering."
+      },
+      {
+        id: "content-editor",
+        title: "Innehållsredaktör / Content Editor",
+        shortTitle: "Content Editor",
+        category: "Digitalt & socialt innehåll",
+        level: "Operativ",
+        skills: ["text", "webb-cms", "projektledning"],
+        description: "Specialist på webbpublicering. Begär in material, kvalitetssäkrar och publicerar samt fungerar ofta som redaktionell rådgivare."
+      },
+      {
+        id: "webbproducent",
+        title: "Webbproducent / Webbredaktör",
+        shortTitle: "Webbproducent",
+        category: "Digitalt & socialt innehåll",
+        level: "Operativ",
+        skills: ["text", "grafisk-design", "foto-bild", "webb-cms", "seo-sem", "data-analys"],
+        description: "Ansvarar för innehåll, struktur och grafisk profil på en webbplats, samt följer upp digitala kampanjer med analysverktyg."
+      },
+      {
+        id: "digital-producer",
+        title: "Digital Producer",
+        shortTitle: "Digital Producer",
+        category: "Digitalt & socialt innehåll",
+        level: "Operativ",
+        skills: ["video-film", "animation", "sociala-medier", "webb-cms"],
+        description: "Liknar en content creator men med starkare fokus på produktion av rörligt material för digitala kanaler."
+      },
+      {
+        id: "digital-projektledare",
+        title: "Digital Projektledare",
+        shortTitle: "Digital Projektledare",
+        category: "Digitalt & socialt innehåll",
+        level: "Strategisk",
+        skills: ["projektledning", "webb-cms", "ux-ui", "affarsutveckling"],
+        description: "Leder teamet bakom webbplatser, appar och digitala tjänster och agerar kravställare mot byråer och utvecklare."
+      },
+      {
+        id: "seo-specialist",
+        title: "SEO-specialist / SEO Manager",
+        shortTitle: "SEO-specialist",
+        category: "Digitalt & socialt innehåll",
+        level: "Strategisk",
+        skills: ["seo-sem", "data-analys", "text", "webb-cms", "webb-kod"],
+        description: "Ansvarar för företagets sökmotoroptimering på kort och lång sikt i nära samarbete med utvecklare, UX och innehållsproducenter."
+      },
+      {
+        id: "social-media-manager",
+        title: "Social Media Manager / Community Manager",
+        shortTitle: "Social Media Manager",
+        category: "Digitalt & socialt innehåll",
+        level: "Operativ",
+        skills: ["sociala-medier", "text", "foto-bild", "video-film", "crm-kund", "paid-media"],
+        description: "Tar fram strategier och producerar, publicerar och följer upp engagerande innehåll och annonsering i sociala kanaler."
+      },
+      {
+        id: "copywriter",
+        title: "Copywriter",
+        shortTitle: "Copywriter",
+        category: "Textproduktion",
+        level: "Operativ",
+        skills: ["text", "varumarke", "teamledning"],
+        description: "Använder ord för att bygga varumärken, skapa relationer och sälja in idéer – från kampanjkoncept till redaktionell copy och microcopy."
+      },
+      {
+        id: "webbcopy",
+        title: "Webbcopy / Digital Copywriter",
+        shortTitle: "Digital Copywriter",
+        category: "Textproduktion",
+        level: "Operativ",
+        skills: ["text", "webb-cms", "seo-sem", "ux-ui"],
+        description: "Producerar texter anpassade efter hur människor läser och agerar digitalt, med fokus på webb, content marketing och SEO."
+      },
+      {
+        id: "teknisk-skribent",
+        title: "Teknisk Skribent / Technical Writer",
+        shortTitle: "Technical Writer",
+        category: "Textproduktion",
+        level: "Operativ",
+        skills: ["text", "ux-ui"],
+        description: "Förmedlar komplex och teknisk information på ett pedagogiskt och användarvänligt sätt i manualer, dokumentation och white papers."
+      },
+      {
+        id: "sprakkonsult",
+        title: "Språkkonsult / Språkvårdare",
+        shortTitle: "Språkkonsult",
+        category: "Textproduktion",
+        level: "Strategisk",
+        skills: ["text", "varumarke"],
+        description: "Arbetar med språkgranskning, tonalitet, rådgivning och utbildning i hur organisationen kommunicerar tydligt och målgruppsanpassat."
+      },
+      {
+        id: "grafisk-designer",
+        title: "Grafisk Designer / Grafisk Formgivare",
+        shortTitle: "Grafisk Designer",
+        category: "Visuell kommunikation",
+        level: "Operativ",
+        skills: ["grafisk-design", "print-forpackning", "varumarke", "foto-bild"],
+        description: "Kommunicerar visuella budskap genom färg, form och typografi för både trycksaker, logotyper, grafiska profiler och digitala kanaler."
+      },
+      {
+        id: "digital-designer",
+        title: "Digital Designer",
+        shortTitle: "Digital Designer",
+        category: "Visuell kommunikation",
+        level: "Operativ",
+        skills: ["grafisk-design", "sociala-medier", "animation", "ux-ui", "webb-cms"],
+        description: "Designar visuellt innehåll för digitala kanaler, digital annonsering, webb och sociala medier."
+      },
+      {
+        id: "visual-designer",
+        title: "Visual Designer / Visuell Designer",
+        shortTitle: "Visual Designer",
+        category: "Visuell kommunikation",
+        level: "Operativ",
+        skills: ["grafisk-design", "ux-ui", "varumarke"],
+        description: "Tar fram visuella koncept, skisser och prototyper och fungerar som rådgivare i grafiska frågor över olika plattformar."
+      },
+      {
+        id: "art-director",
+        title: "Art Director (AD)",
+        shortTitle: "Art Director",
+        category: "Visuell kommunikation",
+        level: "Strategisk",
+        skills: ["teamledning", "grafisk-design", "varumarke", "affarsutveckling"],
+        description: "Leder designprocessen, tar fram kommunikativa koncept, pitchar idéer och arbetsleder formgivare och originalare."
+      },
+      {
+        id: "creative-director",
+        title: "Creative Director (CD)",
+        shortTitle: "Creative Director",
+        category: "Visuell kommunikation",
+        level: "Strategisk",
+        skills: ["teamledning", "varumarke", "text", "grafisk-design", "affarsutveckling"],
+        description: "Har det övergripande kreativa ansvaret för ett team av exempelvis copywriters och art directors och coachar mot affärseffekt."
+      },
+      {
+        id: "originalare",
+        title: "Originalare",
+        shortTitle: "Originalare",
+        category: "Visuell kommunikation",
+        level: "Operativ",
+        skills: ["grafisk-design", "print-forpackning", "foto-bild"],
+        description: "Sätter ihop färdiga koncept till tryck- eller publiceringsklart slutresultat genom att sammanfoga text, bild och layout."
+      },
+      {
+        id: "forpackningsdesigner",
+        title: "Förpackningsdesigner",
+        shortTitle: "Förpackningsdesigner",
+        category: "Visuell kommunikation",
+        level: "Operativ",
+        skills: ["grafisk-design", "print-forpackning", "ux-ui"],
+        description: "Designar förpackningar som stärker varumärket och tilltalar konsumenten, med spets inom tryckteknik och form."
+      },
+      {
+        id: "digital-marknadsforare",
+        title: "Digital Marknadsförare",
+        shortTitle: "Digital Marknadsförare",
+        category: "Marknadsföring & Analys",
+        level: "Operativ",
+        skills: ["sociala-medier", "seo-sem", "paid-media", "data-analys", "webb-cms"],
+        description: "Arbetar brett med marknadsföring i digitala kanaler såsom sociala medier, SEO, SEM, e-postmarknadsföring och digital annonsering."
+      },
+      {
+        id: "digital-strateg",
+        title: "Digital Strateg",
+        shortTitle: "Digital Strateg",
+        category: "Marknadsföring & Analys",
+        level: "Strategisk",
+        skills: ["varumarke", "data-analys", "cro", "seo-sem", "paid-media"],
+        description: "Tar fram datadrivna planer och digitala strategier med fokus på mätbara nyckeltal som ökad trafik och konverteringsgrad."
+      },
+      {
+        id: "growth-marketer",
+        title: "Growth Hacker / Growth Marketer",
+        shortTitle: "Growth Marketer",
+        category: "Marknadsföring & Analys",
+        level: "Strategisk",
+        skills: ["data-analys", "cro", "paid-media", "seo-sem", "ux-ui"],
+        description: "Analyserar användarbeteenden och testar snabba, kreativa lösningar för att driva skalbar digital tillväxt."
+      },
+      {
+        id: "cro-manager",
+        title: "Konverteringsoptimerare (CRO Manager)",
+        shortTitle: "CRO Specialist",
+        category: "Marknadsföring & Analys",
+        level: "Strategisk",
+        skills: ["cro", "data-analys", "ux-ui", "webb-cms"],
+        description: "Mäter och analyserar digitala användarflöden via exempelvis A/B-testning för att öka andelen besökare som konverterar."
+      },
+      {
+        id: "paid-media-manager",
+        title: "Paid Media Manager",
+        shortTitle: "Paid Media Manager",
+        category: "Marknadsföring & Analys",
+        level: "Operativ",
+        skills: ["paid-media", "data-analys", "sociala-medier", "seo-sem"],
+        description: "Specialiserad på köpt digital annonsering – SEM, display, native och sponsrade kampanjer i sociala kanaler."
+      },
+      {
+        id: "brand-manager",
+        title: "Brand Manager / Digital Brand Manager",
+        shortTitle: "Brand Manager",
+        category: "Marknadsföring & Analys",
+        level: "Strategisk",
+        skills: ["varumarke", "projektledning", "affarsutveckling", "sociala-medier"],
+        description: "Utvecklar strategier för att positionera, etablera och stärka varumärket på marknaden och i digitala kanaler."
+      },
+      {
+        id: "marknadskoordinator",
+        title: "Marknadskoordinator",
+        shortTitle: "Marknadskoordinator",
+        category: "Marknadsföring & Analys",
+        level: "Operativ",
+        skills: ["projektledning", "text", "grafisk-design", "sociala-medier", "data-analys"],
+        description: "Bred och koordinerande roll som kombinerar produktion av marknadsmaterial med datainsamling, kampanjstöd och uppföljning."
+      },
+      {
+        id: "crm-manager",
+        title: "CRM Manager / Customer Relationship Manager",
+        shortTitle: "CRM Manager",
+        category: "Marknadsföring & Analys",
+        level: "Strategisk",
+        skills: ["crm-kund", "data-analys", "text", "affarsutveckling"],
+        description: "Arbetar datadrivet med kundvård, lojalitet och automatiserad kommunikation mot befintliga och potentiella kunder."
+      },
+      {
+        id: "kommunikator",
+        title: "Kommunikatör / Digital Kommunikatör",
+        shortTitle: "Digital Kommunikatör",
+        category: "Kommunikation",
+        level: "Operativ",
+        skills: ["text", "sociala-medier", "webb-cms", "pr-press", "projektledning"],
+        description: "Tar fram kommunikationsplaner, producerar innehåll och driver kommunikationsinsatser i digitala, interna och externa kanaler."
+      },
+      {
+        id: "kommunikationsstrateg",
+        title: "Kommunikationsstrateg",
+        shortTitle: "Kommunikationsstrateg",
+        category: "Kommunikation",
+        level: "Strategisk",
+        skills: ["varumarke", "pr-press", "projektledning", "text"],
+        description: "Säkerställer att organisationens kommunikation stöttar de övergripande målen och agerar rådgivare till ledning och team."
+      },
+      {
+        id: "pr-ansvarig",
+        title: "PR-ansvarig / PR-konsult",
+        shortTitle: "PR-strateg",
+        category: "PR & Medierelationer",
+        level: "Strategisk",
+        skills: ["pr-press", "varumarke", "text", "sociala-medier"],
+        description: "Utvecklar PR-strategier, skriver pressmeddelanden, hanterar kriskommunikation och bygger relationer med media och opinionsbildare."
+      },
+      {
+        id: "ux-designer",
+        title: "UX-designer",
+        shortTitle: "UX-designer",
+        category: "UX/UI & AI",
+        level: "Operativ",
+        skills: ["ux-ui", "data-analys", "grafisk-design"],
+        description: "Utformar användarvänliga och friktionsfria digitala tjänster och appar genom användartester, wireframes och prototyper."
+      },
+      {
+        id: "ui-designer",
+        title: "UI-designer / UI Artist",
+        shortTitle: "UI-designer",
+        category: "UX/UI & AI",
+        level: "Operativ",
+        skills: ["ux-ui", "grafisk-design", "animation"],
+        description: "Fokuserar på den visuella upplevelsen i gränssnitt – färger, typografi, komponenter och interaktiva prototyper."
+      },
+      {
+        id: "ux-writer",
+        title: "UX-writer / UX-copy",
+        shortTitle: "UX-writer",
+        category: "UX/UI & AI",
+        level: "Operativ",
+        skills: ["text", "ux-ui"],
+        description: "Skriver microcopy för knappar, menyer, flöden och felmeddelanden i nära samarbete med UX-designers och utvecklare."
+      },
+      {
+        id: "frontend-utvecklare",
+        title: "Frontend-utvecklare",
+        shortTitle: "Frontend-utvecklare",
+        category: "UX/UI & AI",
+        level: "Operativ",
+        skills: ["webb-kod", "ux-ui", "grafisk-design", "seo-sem"],
+        description: "Bygger responsiva webbplatser och användargränssnitt med HTML, CSS och JavaScript tillsammans med designers."
+      },
+      {
+        id: "ai-kreator",
+        title: "AI-kreatör / AI Content Creator",
+        shortTitle: "AI Content Creator",
+        category: "UX/UI & AI",
+        level: "Operativ",
+        skills: ["ai-verktyg", "text", "foto-bild", "video-film", "seo-sem"],
+        description: "Kombinerar kreativ höjd med AI-verktyg för att generera, bearbeta och sökmotoroptimera text, bild, ljud och video."
+      },
+      {
+        id: "ai-prompt-specialist",
+        title: "AI Prompt Specialist / AI-redaktör",
+        shortTitle: "AI Prompt Specialist",
+        category: "UX/UI & AI",
+        level: "Operativ",
+        skills: ["ai-verktyg", "text", "varumarke"],
+        description: "Specialiserad på att styra och prompta generativa AI-verktyg så att text och visuellt material träffar varumärkets tonalitet."
+      },
+      {
+        id: "video-creative",
+        title: "Video Creative / Online Video Producer",
+        shortTitle: "Video Creative",
+        category: "Film, foto & ljud",
+        level: "Operativ",
+        skills: ["video-film", "foto-bild", "sociala-medier", "text"],
+        description: "Driver rörlig produktion hela vägen från idé och manus till inspelning, klippning och anpassning för sociala kanaler."
+      },
+      {
+        id: "fotograf",
+        title: "Fotograf / Bildredigerare",
+        shortTitle: "Fotograf & Retoucher",
+        category: "Film, foto & ljud",
+        level: "Operativ",
+        skills: ["foto-bild", "grafisk-design", "webb-cms"],
+        description: "Ansvarar för bildkomposition, ljussättning, retusch och bildmontage anpassat för både print och digital publicering."
+      },
+      {
+        id: "motion-graphic-designer",
+        title: "Motion Graphic Designer",
+        shortTitle: "Motion Graphic Designer",
+        category: "Animation",
+        level: "Operativ",
+        skills: ["animation", "grafisk-design", "video-film", "ux-ui"],
+        description: "Skapar animationer och rörlig grafik i 2D eller 3D – från animerade logotyper och infographics till UI-rörelser och kampanjfilm."
+      },
+      {
+        id: "3d-generalist",
+        title: "3D-generalist / 3D-grafiker",
+        shortTitle: "3D-generalist",
+        category: "Animation",
+        level: "Operativ",
+        skills: ["animation", "grafisk-design", "foto-bild"],
+        description: "Skapar 3D-visualiseringar, miljöer och rörligt material för reklam, produktvisualisering, film och digitala upplevelser."
+      },
+      {
+        id: "event-manager",
+        title: "Event Manager / Projektledare Event",
+        shortTitle: "Event Manager",
+        category: "Event & Brand Experience",
+        level: "Strategisk",
+        skills: ["event-scen", "projektledning", "varumarke", "affarsutveckling"],
+        description: "Har helhetsansvar för koncept, budget, leverantörer och genomförande av fysiska och digitala event och varumärkesupplevelser."
+      },
+      {
+        id: "eventdesigner",
+        title: "Eventdesigner / Konceptutvecklare",
+        shortTitle: "Eventdesigner",
+        category: "Event & Brand Experience",
+        level: "Operativ",
+        skills: ["event-scen", "grafisk-design", "varumarke", "print-forpackning"],
+        description: "Utformar fysiska eventmiljöer, scenografi och mässmontrar där dekor, ljus, ljud och form aktiverar flera sinnen."
+      },
+      {
+        id: "event-marketer",
+        title: "Event Marketer",
+        shortTitle: "Event Marketer",
+        category: "Event & Brand Experience",
+        level: "Operativ",
+        skills: ["event-scen", "varumarke", "sociala-medier", "crm-kund"],
+        description: "Skapar fysiska möten med målgruppen via pop-ups, brand activation, sponsring och upplevelsebaserad marknadsföring."
+      },
+      {
+        id: "ecommerce-manager",
+        title: "E-handelsansvarig / E-commerce Manager",
+        shortTitle: "E-commerce Manager",
+        category: "Handel & Affärsutveckling",
+        level: "Strategisk",
+        skills: ["ehandel", "cro", "data-analys", "seo-sem", "affarsutveckling"],
+        description: "Ansvarar för försäljning, konverteringsoptimering, analys och kundresa i ett företags e-handel."
+      },
+      {
+        id: "online-merchandiser",
+        title: "Digital Butikskommunikatör / Online Merchandiser",
+        shortTitle: "Online Merchandiser",
+        category: "Handel & Affärsutveckling",
+        level: "Operativ",
+        skills: ["ehandel", "grafisk-design", "cro", "ux-ui"],
+        description: "Optimerar hur produkter presenteras och exponeras i e-handeln för att inspirera till köp och stärka varumärket."
+      },
+      {
+        id: "product-marketing-manager",
+        title: "Product Marketing Manager",
+        shortTitle: "Product Marketing Manager",
+        category: "Handel & Affärsutveckling",
+        level: "Strategisk",
+        skills: ["affarsutveckling", "varumarke", "data-analys", "projektledning", "ehandel"],
+        description: "Ansvarar för positionering, målgruppsanalys och lanseringsstrategier för produkter eller tjänster."
+      }
+    ];
+
+    // State
+    let selectedSkills = new Set();
+    let selectedLevel = "all";
+    let hybridFormat = "slash";
+    let hybridRoleA = "digital-designer";
+    let hybridRoleB = "content-creator";
+    let nextSlotToFill = "A";
+    let pitchVariantIndex = 0;
+    const MAX_SKILLS = 5;
+
+    // DOM Elements
+    const skillGrid = document.getElementById("skillGrid");
+    const resultsContainer = document.getElementById("resultsContainer");
+    const counterText = document.getElementById("counterText");
+    const resetBtn = document.getElementById("resetBtn");
+    const resultsHeading = document.getElementById("resultsHeading");
+    const themeToggle = document.getElementById("themeToggle");
+    const hybridSelectA = document.getElementById("hybridSelectA");
+    const hybridSelectB = document.getElementById("hybridSelectB");
+    const hybridOutput = document.getElementById("hybridOutput");
+    const copyHybridBtn = document.getElementById("copyHybridBtn");
+    const shuffleHybridBtn = document.getElementById("shuffleHybridBtn");
+    const pitchOutput = document.getElementById("pitchOutput");
+    const pitchToneLabel = document.getElementById("pitchToneLabel");
+    const cyclePitchBtn = document.getElementById("cyclePitchBtn");
+    const copyPitchBtn = document.getElementById("copyPitchBtn");
+
+    // Lookup maps
+    const skillMap = {};
+    const skillShortMap = {};
+    const skillVerbMap = {};
+    SKILL_GROUPS.forEach(g => g.skills.forEach(s => {
+      skillMap[s.id] = s.label;
+      skillShortMap[s.id] = s.short;
+      skillVerbMap[s.id] = s.verb;
+    }));
+
+    const roleMap = {};
+    ROLES.forEach(r => roleMap[r.id] = r);
+
+    // Format list in natural Swedish ("A, B och C")
+    function formatSwedishList(items) {
+      if (items.length === 0) return "";
+      if (items.length === 1) return items[0];
+      if (items.length === 2) return `${items[0]} och ${items[1]}`;
+      return `${items.slice(0, -1).join(", ")} och ${items[items.length - 1]}`;
+    }
+
+    // Populate Hybrid Dropdowns
+    function initHybridDropdowns() {
+      const sortedRoles = [...ROLES].sort((a, b) => a.shortTitle.localeCompare(b.shortTitle, "sv"));
+      [hybridSelectA, hybridSelectB].forEach(select => {
+        select.innerHTML = "";
+        sortedRoles.forEach(role => {
+          const opt = document.createElement("option");
+          opt.value = role.id;
+          opt.textContent = `${role.shortTitle} (${role.category})`;
+          select.appendChild(opt);
+        });
+      });
+      hybridSelectA.value = hybridRoleA;
+      hybridSelectB.value = hybridRoleB;
+    }
+
+    // Generate Pitch Sentence based on Role A, Role B, Selected Skills & Tone
+    function updatePitchOutput() {
+      const roleA = roleMap[hybridRoleA] || ROLES[0];
+      const roleB = roleMap[hybridRoleB] || ROLES[1];
+
+      const chosenVerbs = Array.from(selectedSkills).map(id => skillVerbMap[id]);
+      const fallbackVerbs = Array.from(new Set([...roleA.skills, ...roleB.skills]))
+        .slice(0, 3)
+        .map(id => skillVerbMap[id]);
+
+      const activeSkillsText = formatSwedishList(chosenVerbs.length > 0 ? chosenVerbs : fallbackVerbs);
+
+      const tones = [
+        {
+          label: "LinkedIn / CV-pitch · Helhetsorienterad",
+          build: () => `Jag arbetar i skärningspunkten mellan ${roleA.shortTitle} och ${roleB.shortTitle}, där jag förenar kreativ idéhöjd med praktisk leverans. Med spets inom ${activeSkillsText} hjälper jag team och varumärken att ta projekt hela vägen från strategi till färdig produktion.`
+        },
+        {
+          label: "LinkedIn / CV-pitch · Kommersiell & Resultatdriven",
+          build: () => `Som ${roleA.shortTitle} och ${roleB.shortTitle} omsätter jag insikter och affärsmål till konkret kommunikation som gör skillnad. Jag kombinerar erfarenhet inom ${activeSkillsText} för att skapa träffsäkra lösningar med mätbar effekt.`
+        },
+        {
+          label: "LinkedIn / CV-pitch · Pragmatisk & T-formad",
+          build: () => `Mångsidig kreatör och problemlösare med dubbla ben inom ${roleA.shortTitle} och ${roleB.shortTitle}. Genom att kombinera ${activeSkillsText} minskar jag glappet mellan idé, form och teknik – och ser till att saker blir gjorda med hög kvalitet.`
+        }
+      ];
+
+      const currentTone = tones[pitchVariantIndex % tones.length];
+      pitchToneLabel.textContent = currentTone.label;
+      pitchOutput.textContent = currentTone.build();
+    }
+
+    // Format Hybrid Headline
+    function updateHybridOutput() {
+      const roleA = roleMap[hybridRoleA] || ROLES[0];
+      const roleB = roleMap[hybridRoleB] || ROLES[1];
+
+      const selectedShorts = Array.from(selectedSkills)
+        .map(id => skillShortMap[id])
+        .slice(0, 3);
+
+      const extras = selectedShorts.length > 0 
+        ? selectedShorts.join(" · ") 
+        : "Strategi · Produktion · Design";
+
+      let formatted = "";
+      if (hybridFormat === "slash") {
+        formatted = `${roleA.shortTitle} / ${roleB.shortTitle}`;
+      } else if (hybridFormat === "dot") {
+        formatted = `${roleA.shortTitle} · ${roleB.shortTitle} · ${extras}`;
+      } else if (hybridFormat === "tech") {
+        formatted = `// ${roleA.shortTitle} + ${roleB.shortTitle} :: ${extras}`;
+      }
+
+      hybridOutput.textContent = formatted;
+      updatePitchOutput();
+    }
+
+    // Auto-pick complementary pair based on matches
+    function autoSuggestHybrid(matches) {
+      if (matches.length < 2) return;
+      const first = matches[0];
+      const complementary = matches.find(m => m.id !== first.id && m.category !== first.category) || matches[1];
+      
+      hybridRoleA = first.id;
+      hybridRoleB = complementary.id;
+      hybridSelectA.value = hybridRoleA;
+      hybridSelectB.value = hybridRoleB;
+      updateHybridOutput();
+    }
+
+    // Render Skill Chips
+    function renderSkills() {
+      skillGrid.innerHTML = "";
+      SKILL_GROUPS.forEach(group => {
+        const card = document.createElement("div");
+        card.className = "skill-group";
+
+        const title = document.createElement("h2");
+        title.textContent = group.name;
+        card.appendChild(title);
+
+        const chipsWrap = document.createElement("div");
+        chipsWrap.className = "chips";
+
+        group.skills.forEach(skill => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "chip";
+          btn.textContent = skill.label;
+
+          const isSelected = selectedSkills.has(skill.id);
+          const isMaxed = selectedSkills.size >= MAX_SKILLS && !isSelected;
+
+          if (isSelected) btn.classList.add("selected");
+          if (isMaxed) btn.classList.add("disabled");
+
+          btn.addEventListener("click", () => toggleSkill(skill.id));
+          chipsWrap.appendChild(btn);
+        });
+
+        card.appendChild(chipsWrap);
+        skillGrid.appendChild(card);
+      });
+
+      counterText.textContent = `Valda färdigheter: ${selectedSkills.size} / ${MAX_SKILLS}`;
+      resetBtn.style.display = selectedSkills.size > 0 ? "inline" : "none";
+    }
+
+    function toggleSkill(skillId) {
+      if (selectedSkills.has(skillId)) {
+        selectedSkills.delete(skillId);
+      } else if (selectedSkills.size < MAX_SKILLS) {
+        selectedSkills.add(skillId);
+      }
+      renderSkills();
+      const matches = renderResults();
+      if (selectedSkills.size >= 1) {
+        autoSuggestHybrid(matches);
+      } else {
+        updateHybridOutput();
+      }
+    }
+
+    // Scoring & Matching Algorithm
+    function getMatchedRoles() {
+      const filteredByLevel = ROLES.filter(role => 
+        selectedLevel === "all" || role.level === selectedLevel
+      );
+
+      if (selectedSkills.size === 0) {
+        return filteredByLevel.slice(0, 6).map(r => ({ ...r, score: null, hits: [] }));
+      }
+
+      const scored = filteredByLevel.map(role => {
+        const hits = role.skills.filter(s => selectedSkills.has(s));
+        if (hits.length === 0) return null;
+
+        const userCoverage = hits.length / selectedSkills.size;
+        const rolePrecision = hits.length / role.skills.length;
+        const rawScore = (userCoverage * 0.65) + (rolePrecision * 0.35);
+        const percentage = Math.min(99, Math.round(rawScore * 100));
+
+        return {
+          ...role,
+          hits,
+          hitCount: hits.length,
+          score: percentage
+        };
+      }).filter(Boolean);
+
+      scored.sort((a, b) => b.hitCount - a.hitCount || b.score - a.score);
+      return scored.slice(0, 8);
+    }
+
+    // Render Results
+    function renderResults() {
+      const matches = getMatchedRoles();
+      resultsContainer.innerHTML = "";
+
+      if (selectedSkills.size === 0) {
+        resultsHeading.textContent = "Exempel på roller (välj färdigheter ovan för personlig matchning)";
+      } else {
+        resultsHeading.textContent = `Bästa enskilda träffar (${matches.length} st)`;
+      }
+
+      if (matches.length === 0) {
+        resultsContainer.innerHTML = `
+          <div class="empty-state">
+            <p>Inga exakta träffar hittades med valt nivåfilter. Prova att byta till <strong>Alla roller</strong> eller justera dina färdigheter.</p>
+          </div>
+        `;
+        return matches;
+      }
+
+      matches.forEach(role => {
+        const card = document.createElement("article");
+        card.className = "role-card";
+
+        const tagsHtml = role.skills.map(sId => {
+          const isHit = role.hits.includes(sId);
+          return `<span class="matched-tag ${isHit ? "hit" : ""}">${skillMap[sId] || sId}</span>`;
+        }).join("");
+
+        const scoreHtml = role.score !== null 
+          ? `<span class="match-score">${role.score}% matchning</span>` 
+          : "";
+
+        card.innerHTML = `
+          <div class="role-top">
+            <div class="role-meta">
+              <span class="badge">${role.category}</span>
+              <span class="badge">${role.level}</span>
+            </div>
+            ${scoreHtml}
+          </div>
+          <h3 class="role-title">${role.title}</h3>
+          <p class="role-desc">${role.description}</p>
+          <div class="role-footer">
+            <div class="matched-tags">${tagsHtml}</div>
+            <div class="card-actions">
+              <button type="button" class="copy-btn mix-btn">+ Mixa</button>
+              <button type="button" class="copy-btn copy-single-btn">Kopiera titel</button>
+            </div>
+          </div>
+        `;
+
+        card.querySelector(".copy-single-btn").addEventListener("click", (e) => {
+          navigator.clipboard.writeText(role.title);
+          const btn = e.currentTarget;
+          const original = btn.textContent;
+          btn.textContent = "Kopierad!";
+          setTimeout(() => btn.textContent = original, 1500);
+        });
+
+        card.querySelector(".mix-btn").addEventListener("click", () => {
+          if (nextSlotToFill === "A") {
+            hybridRoleA = role.id;
+            hybridSelectA.value = role.id;
+            nextSlotToFill = "B";
+          } else {
+            hybridRoleB = role.id;
+            hybridSelectB.value = role.id;
+            nextSlotToFill = "A";
+          }
+          updateHybridOutput();
+          document.getElementById("hybridStudio").scrollIntoView({ behavior: "smooth", block: "center" });
+        });
+
+        resultsContainer.appendChild(card);
+      });
+
+      return matches;
+    }
+
+    // Helper for copy feedback
+    function handleCopy(button, text) {
+      navigator.clipboard.writeText(text);
+      const original = button.textContent;
+      button.textContent = "Kopierad!";
+      setTimeout(() => button.textContent = original, 1500);
+    }
+
+    // Event Listeners
+    hybridSelectA.addEventListener("change", (e) => {
+      hybridRoleA = e.target.value;
+      updateHybridOutput();
+    });
+
+    hybridSelectB.addEventListener("change", (e) => {
+      hybridRoleB = e.target.value;
+      updateHybridOutput();
+    });
+
+    document.querySelectorAll(".style-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".style-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        hybridFormat = btn.dataset.format;
+        updateHybridOutput();
+      });
+    });
+
+    shuffleHybridBtn.addEventListener("click", () => {
+      const pool = getMatchedRoles();
+      const source = pool.length >= 2 ? pool : ROLES;
+      const idxA = Math.floor(Math.random() * source.length);
+      let idxB = Math.floor(Math.random() * source.length);
+      if (idxB === idxA) idxB = (idxA + 1) % source.length;
+
+      hybridRoleA = source[idxA].id;
+      hybridRoleB = source[idxB].id;
+      hybridSelectA.value = hybridRoleA;
+      hybridSelectB.value = hybridRoleB;
+      updateHybridOutput();
+    });
+
+    copyHybridBtn.addEventListener("click", () => handleCopy(copyHybridBtn, hybridOutput.textContent));
+
+    cyclePitchBtn.addEventListener("click", () => {
+      pitchVariantIndex++;
+      updatePitchOutput();
+    });
+
+    copyPitchBtn.addEventListener("click", () => handleCopy(copyPitchBtn, pitchOutput.textContent));
+
+    document.querySelectorAll(".level-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".level-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        selectedLevel = btn.dataset.level;
+        const matches = renderResults();
+        autoSuggestHybrid(matches);
+      });
+    });
+
+    resetBtn.addEventListener("click", () => {
+      selectedSkills.clear();
+      renderSkills();
+      renderResults();
+      updateHybridOutput();
+    });
+
+    themeToggle.addEventListener("click", () => {
+      const html = document.documentElement;
+      const isDark = html.getAttribute("data-theme") === "dark";
+      html.setAttribute("data-theme", isDark ? "light" : "dark");
+      themeToggle.textContent = isDark ? "Mörkt läge" : "Ljust läge";
+    });
+
+    // Init
+    initHybridDropdowns();
+    renderSkills();
+    renderResults();
+    updateHybridOutput();
+  </script>
+</body>
+</html>
